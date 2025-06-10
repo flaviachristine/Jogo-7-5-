@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo 7,5</title>
+</head>
+<style>
+    #botoesJogo {
+        display: none;
+    }
+</style>
+
+<body>
+    <h1>Jogo de Sete e Meio</h1>
+
+    <button id="btnComecar" onclick="iniciarJogo()">Começar Jogo</button>
+
+    <div id="botoesJogo">
+        <button onclick="comprarCarta()" id="comprar">Pedir Outra Carta</button>
+        <button onclick="passarAVez()" id="passar">Passar a vez</button>
+        <button onclick="location.reload()" id="reiniciar" disabled="true">Reiniciar</button><br><br>
+    </div>
+    <hr>
+    <div id="resultado"></div>
+</body>
+
+</html>
+<script>
+    const cartas = [
+        ["A", "2", "3", "4", "5", "6", "7", "J", "Q", "K"], //copa
+        ["A", "2", "3", "4", "5", "6", "7", "J", "Q", "K"], //ouro
+        ["A", "2", "3", "4", "5", "6", "7", "J", "Q", "K"], //espada
+        ["A", "2", "3", "4", "5", "6", "7", "J", "Q", "K"] //paus
+    ]
+
+    let pontos = 0
+    let pontosBanca = 0
+
+    function iniciarJogo() {
+        document.getElementById("btnComecar").style.display = "none";
+        document.getElementById("botoesJogo").style.display = "block";
+    }
+
+    function comprarCarta() {
+        let naipe = Math.floor(Math.random() * 3)
+
+        let valorCarta = Math.floor(Math.random() * 9)
+
+        let carta = cartas[naipe][valorCarta]
+        if (valorCarta == 0) {
+            valorCarta = 1
+        } else if (valorCarta > 6) {
+            valorCarta = 0.5
+        } else {
+            valorCarta++
+        }
+        pontos += valorCarta
+        if (naipe == 0) {
+            resultado.innerHTML += `Jogador: (${pontos} pontos) - copas de ${carta}<br>`
+        } else if (naipe == 1) {
+            resultado.innerHTML += `Jogador: (${pontos} pontos) - ouros de ${carta}<br>`
+        } else if (naipe == 2) {
+            resultado.innerHTML += `Jogador: (${pontos} pontos) - espada de ${carta}<br>`
+        } else if (naipe == 3) {
+            resultado.innerHTML += `Jogador: (${pontos} pontos) - paus de ${carta}<br>`
+        }
+        pontos.innerHTML = pontos
+        if (pontos == 7.5) {
+            resultado.innerHTML += `SETE E MEIO! O jogador venceu com 7.5 pontos!`
+            comprar.disabled = true
+            passar.disabled = true
+            reiniciar.disabled = false
+
+        } else if (pontos > 7.5) {
+            resultado.innerHTML += `O JOGADOR ESTOUROU! A banca venceu com ${pontosBanca} pontos`
+            comprar.disabled = true
+            passar.disabled = true
+            reiniciar.disabled = false
+        }
+    }
+    function passarAVez() {
+        while (pontosBanca <= pontos) {
+            let naipe = Math.floor(Math.random() * 3)
+
+            let valorCarta = Math.floor(Math.random() * 9)
+
+            let carta = cartas[naipe][valorCarta]
+            if (valorCarta == 0) {
+                valorCarta = 1
+            } else if (valorCarta > 6) {
+                valorCarta = 0.5
+            } else {
+                valorCarta++
+            }
+            pontosBanca += valorCarta
+            if (naipe == 0) {
+                resultado.innerHTML += `Banca: (${pontosBanca} pontos) - copas de ${carta}<br>`
+            } else if (naipe == 1) {
+                resultado.innerHTML += `Banca: (${pontosBanca} pontos) - ouros de ${carta}<br>`
+            } else if (naipe == 2) {
+                resultado.innerHTML += `Banca: (${pontosBanca} pontos) - espada de ${carta}<br>`
+            } else if (naipe == 3) {
+                resultado.innerHTML += `Banca: (${pontosBanca} pontos) - paus de ${carta}<br>`
+            }
+            pontos.innerHTML = pontosBanca
+        }
+        if (pontosBanca == 7.5) {
+            resultado.innerHTML += `SETE E MEIO! A banca venceu com 7.5 pontos!`
+            comprar.disabled = true
+            passar.disabled = true
+            reiniciar.disabled = false
+
+        } else if (pontosBanca > 7.5) {
+            resultado.innerHTML += `A BANCA ESTOUROU! O jogador venceu com ${pontos} pontos!`
+            comprar.disabled = true
+            passar.disabled = true
+            reiniciar.disabled = false
+            
+        } else if(pontosBanca > pontos){
+            resultado.innerHTML += `A banca venceu com ${pontosBanca} pontos!`
+            comprar.disabled = true
+            passar.disabled = true
+            reiniciar.disabled = false
+        }
+    }
+</script>
